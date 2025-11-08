@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG文件预览</title>
+    <style>
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .svg-item {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .svg-name {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        svg {
+            max-width: 100%;
+            max-height: 200px;
+            border: 1px dashed #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">SVG文件预览</h1>
+    <div class="preview-container" id="previewContainer"></div>
+
+    <script>
+        // 替换为你的5个SVG文件名（确保与实际文件名一致）
+        const svgFiles = [
+            "file1.svg",
+            "file2.svg",
+            "file3.svg",
+            "file4.svg",
+            "file5.svg"
+        ];
+
+        const container = document.getElementById('previewContainer');
+
+        svgFiles.forEach(filename => {
+            // 创建预览项
+            const item = document.createElement('div');
+            item.className = 'svg-item';
+            
+            // 添加文件名
+            const nameElement = document.createElement('div');
+            nameElement.className = 'svg-name';
+            nameElement.textContent = filename;
+            item.appendChild(nameElement);
+            
+            // 添加SVG预览
+            const svgContainer = document.createElement('div');
+            svgContainer.innerHTML = `<object data="${filename}" type="image/svg+xml">
+                                        无法加载 ${filename}
+                                     </object>`;
+            item.appendChild(svgContainer);
+            
+            container.appendChild(item);
+        });
+    </script>
+</body>
+</html>
