@@ -10,59 +10,88 @@
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto; /* 居中容器 */
         }
         .svg-item {
             border: 1px solid #ddd;
             padding: 15px;
             border-radius: 8px;
             text-align: center;
+            transition: box-shadow 0.3s; /* hover效果 */
+        }
+        .svg-item:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .svg-name {
             margin-bottom: 10px;
             font-weight: bold;
             color: #333;
+            word-break: break-all; /* 长文件名换行 */
         }
-        svg {
+        .svg-preview {
             max-width: 100%;
             max-height: 200px;
             border: 1px dashed #ccc;
+            margin: 0 auto; /* 图片居中 */
+        }
+        .error-message {
+            color: #dc3545; /* 错误提示红色 */
+            padding: 20px 0;
+            font-size: 0.9em;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">SVG文件预览</h1>
+    <h1>SVG文件预览</h1>
     <div class="preview-container" id="previewContainer"></div>
 
     <script>
-        // 替换为你的5个SVG文件名（确保与实际文件名一致）
+        // 1. 替换为你的SVG文件名（必须与GitHub仓库中的文件名完全一致，包括大小写）
+        // 示例：若SVG在仓库根目录，直接写文件名；若在子文件夹，写"子文件夹/文件名.svg"
         const svgFiles = [
-            "file1.svg",
-            "file2.svg",
-            "file3.svg",
-            "file4.svg",
-            "file5.svg"
+            "icon1.svg",    // 替换为实际文件名
+            "icon2.svg",    // 替换为实际文件名
+            "icon3.svg",    // 替换为实际文件名
+            "icon4.svg",    // 替换为实际文件名
+            "icon5.svg"     // 替换为实际文件名
         ];
 
         const container = document.getElementById('previewContainer');
 
         svgFiles.forEach(filename => {
-            // 创建预览项
+            // 创建预览项容器
             const item = document.createElement('div');
             item.className = 'svg-item';
             
-            // 添加文件名
+            // 添加文件名显示
             const nameElement = document.createElement('div');
             nameElement.className = 'svg-name';
             nameElement.textContent = filename;
             item.appendChild(nameElement);
             
-            // 添加SVG预览
-            const svgContainer = document.createElement('div');
-            svgContainer.innerHTML = `<object data="${filename}" type="image/svg+xml">
-                                        无法加载 ${filename}
-                                     </object>`;
-            item.appendChild(svgContainer);
+            // 添加SVG预览（使用img标签，兼容性更好）
+            const svgImg = document.createElement('img');
+            svgImg.className = 'svg-preview';
+            svgImg.src = `./${filename}`; // 明确相对路径（关键修复）
+            svgImg.alt = `${filename} 预览`;
             
+            // 错误处理：加载失败时显示提示
+            svgImg.onerror = function() {
+                // 移除错误的图片，显示错误信息
+                svgImg.remove();
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = `❌ 无法加载 ${filename}（可能路径错误或文件不存在）`;
+                item.appendChild(errorDiv);
+            };
+            
+            item.appendChild(svgImg);
             container.appendChild(item);
         });
     </script>
