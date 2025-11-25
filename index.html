@@ -217,7 +217,23 @@
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
         }
-    </style>
+    
+.interactive-svg {
+    transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+.interactive-svg:hover {
+    opacity: 0.85;
+    filter: brightness(1.1);
+    box-shadow: 0 0 12px rgba(0,0,0,0.25);
+    transform: scale(1.05);
+}
+.interactive-svg.active-large {
+    transform: scale(1.5);
+    z-index: 999;
+}
+
+</style>
 </head>
 <body>
     <div class="header">
@@ -373,6 +389,23 @@
 
         // 初始化页面
         loadSVGs();
-    </script>
+    
+// Add interactions to each SVG element after insertion
+function enhanceInteractions() {
+    document.querySelectorAll(".svg-container svg").forEach(svg => {
+        svg.classList.add("interactive-svg");
+        svg.addEventListener("click", () => {
+            svg.classList.toggle("active-large");
+        });
+    });
+}
+
+const oldLoad = loadSVGs;
+loadSVGs = async function() {
+    await oldLoad();
+    enhanceInteractions();
+};
+
+</script>
 </body>
 </html>
